@@ -48,7 +48,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\childio.vcxproj">
+    <ProjectReference Include="..\stdio_recorder.vcxproj">
       <Project>{ace665aa-e396-4bf8-854e-5f202ba80928}</Project>
     </ProjectReference>
   </ItemGroup>

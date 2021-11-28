@@ -24,6 +24,7 @@
     <ProjectGuid>{ace665aa-e396-4bf8-854e-5f202ba80928}</ProjectGuid>
     <RootNamespace>childio</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>stdio_recorder</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -6,6 +6,15 @@
 
 struct StartupInfo
 {
+	StartupInfo() = default;
+	StartupInfo(StartupInfo&& moveFrom) noexcept
+		: startupInfo{ moveFrom.startupInfo }
+	{
+		moveFrom.startupInfo.hStdError	= nullptr;
+		moveFrom.startupInfo.hStdInput	= nullptr;
+		moveFrom.startupInfo.hStdOutput = nullptr;
+	}
+	StartupInfo(StartupInfo& copyFrom) = delete;
 	STARTUPINFOW startupInfo{};
 	~StartupInfo()
 	{
@@ -23,6 +32,14 @@ struct StartupInfo
 struct ProcessInfo
 {
 	PROCESS_INFORMATION processInfo{};
+	ProcessInfo() = default;
+	ProcessInfo(ProcessInfo&& moveFrom) noexcept
+		: processInfo{moveFrom.processInfo}
+	{
+		moveFrom.processInfo.hProcess	= nullptr;
+		moveFrom.processInfo.hThread	= nullptr;
+	}
+	ProcessInfo(ProcessInfo& copyFrom) = delete;
 	~ProcessInfo()
 	{
 		// handles need to be closed when we are done with them.
@@ -80,7 +97,7 @@ public:
 		{
 			throw std::runtime_error{ "CreateProcessW failed" };
 		}
-		return std::move(process);
+		return process;
 	}
 private:
 	bool validateExe(const std::filesystem::path& exe) const

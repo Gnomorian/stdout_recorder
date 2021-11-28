@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <filesystem>
 #include <vector>
+#include "winapi_context.h"
 
 struct Process
 {
@@ -11,9 +12,13 @@ struct Process
 
 class ProcessBuilder
 {
-	std::filesystem::path _exe;
-	std::wstring _arguments;
+	WinapiContext context{};
+	std::filesystem::path _exe{};
+	std::wstring _arguments{};
 public:
+	explicit ProcessBuilder(WinapiContext context = WinapiContext())
+		: context{ context }
+	{}
 	ProcessBuilder& executable(const std::filesystem::path& executable)
 	{
 		if (!validateExe(executable))
@@ -39,7 +44,7 @@ public:
 		const wchar_t* app{ _exe.empty() ? nullptr : _exe.c_str() };
 		wchar_t* args{ _arguments.empty() ? nullptr : _arguments.data() };
 		Process process;
-		if (CreateProcessW(app, args, nullptr, nullptr, false, 0, nullptr, nullptr, &process.startupInfo, &process.procInfo) == 0)
+		if (context.CreateProcessW(app, args, nullptr, nullptr, false, 0, nullptr, nullptr, &process.startupInfo, &process.procInfo) == 0)
 		{
 			throw std::runtime_error{ "CreateProcessW failed" };
 		}

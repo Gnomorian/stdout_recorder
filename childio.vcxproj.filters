@@ -23,7 +23,10 @@
     <ClInclude Include="cmdlineSwitchDescriptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="process.h">
+    <ClInclude Include="stdioprocess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi_context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

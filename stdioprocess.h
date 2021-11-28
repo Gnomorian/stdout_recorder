@@ -4,10 +4,42 @@
 #include <vector>
 #include "winapi_context.h"
 
-struct Process
+struct StartupInfo
 {
 	STARTUPINFOW startupInfo{};
-	PROCESS_INFORMATION procInfo{};
+	~StartupInfo()
+	{
+		// handles need to be closed when we are done with them.
+		CloseHandle(startupInfo.hStdError);
+		CloseHandle(startupInfo.hStdInput);
+		CloseHandle(startupInfo.hStdOutput);
+	}
+	operator STARTUPINFO* ()
+	{
+		return &startupInfo;
+	}
+};
+
+struct ProcessInfo
+{
+	PROCESS_INFORMATION processInfo{};
+	~ProcessInfo()
+	{
+		// handles need to be closed when we are done with them.
+		CloseHandle(processInfo.hProcess);
+		CloseHandle(processInfo.hThread);
+	}
+	operator PROCESS_INFORMATION* ()
+	{
+		return &processInfo;
+	}
+
+};
+
+struct Process
+{
+	StartupInfo startupInfo{};
+	ProcessInfo procInfo{};
 };
 
 class ProcessBuilder
@@ -44,7 +76,7 @@ public:
 		const wchar_t* app{ _exe.empty() ? nullptr : _exe.c_str() };
 		wchar_t* args{ _arguments.empty() ? nullptr : _arguments.data() };
 		Process process;
-		if (context.CreateProcessW(app, args, nullptr, nullptr, false, 0, nullptr, nullptr, &process.startupInfo, &process.procInfo) == 0)
+		if (context.CreateProcessW(app, args, nullptr, nullptr, false, 0, nullptr, nullptr, process.startupInfo, process.procInfo) == 0)
 		{
 			throw std::runtime_error{ "CreateProcessW failed" };
 		}
